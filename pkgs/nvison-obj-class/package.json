@@ -1,0 +1,17 @@
+{
+  "name": "nvison-obj-class",
+  "version": "1.0.2",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ndtreejs": "^1.3.24",
+    "nv-facutil-basic": "^1.0.12",
+    "nv-string-basic": "^1.0.18",
+    "nvison-obj-typedef": "^1.0.3"
+  }
+}

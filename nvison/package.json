@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "ndtreejs": "^1.3.22",
+    "nv-char-escape": "^1.0.9",
+    "nv-char-whitespace": "^1.0.3",
+    "nv-facutil-basic": "^1.0.15",
+    "nv-facutil-generator": "^1.0.0",
+    "nv-facutil-multi-key": "^1.0.1",
+    "nv-facutil-state": "^1.0.0",
+    "nv-js-parse": "^1.0.1",
+    "nv-string-basic": "^1.0.20",
+    "nv-string-comment": "^1.0.3",
+    "nv-string-stream": "^1.0.4",
+    "nvison-cfg": "^1.0.0",
+    "nvison-obj-class": "^1.0.2",
+    "nvison-obj-typedef": "^1.0.3",
+    "nvison-parse-d": "^1.0.2",
+    "nvison-parse-engine": "^1.0.0",
+    "nvison-parse-scope": "^1.0.0",
+    "nvison-parse-state": "^1.0.7"
+  }
+}
