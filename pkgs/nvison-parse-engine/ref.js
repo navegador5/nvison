@@ -43,12 +43,12 @@ function handle(d) {
             } else if(state === gtv(STATE.av)) {
             
                 d.$mv_avcmt_to_avcmt();
-                if(pnd.$is_ary()) {
+                if(pnd.is_ary()) {
                     
                     d.$add_ref_to_parent(refnd);
                     d.state = STATE.av;
 
-                } else if(pnd.$is_dict()) {
+                } else if(pnd.is_dict()) {
                 
                     d.str_cache.k = refnd.vto_rawstr();
                     d.state = STATE.ak;

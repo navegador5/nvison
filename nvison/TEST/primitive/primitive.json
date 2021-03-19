@@ -1,0 +1,7 @@
+{
+    normal-num: [175 0x1101 0b1101 0o1101 -123.12e3 -1.1e2.5 .1E3.13] 
+    special-num: [+Infinity; -Infinity; NaN];
+    bigint: [1234567891234567889123456789n,1234567891234567889123456789n],
+    str-str : [abc, 'def\tsquoted'; "d    quoted" `tock-quoted`];
+    str"@concat@"str  :  prefix"\t\v\b"suffix
+}

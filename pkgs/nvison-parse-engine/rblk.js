@@ -84,7 +84,7 @@ function match_handle(d) {
 
 
 function handle(d) {
-    let cond = $is_rblk_match();
+    let cond = d.$is_rblk_match();
     if(cond) {
         match_handle(d)
     } else {

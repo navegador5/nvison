@@ -26,9 +26,9 @@ function handle(d) {
         
         let pnd = d.stack.lst;
         d.$setup_leafnd();
-        if(pnd.$is_ary()) {
+        if(pnd.is_ary()) {
             d.$open_nonleaf_nd();
-        } else if(pnd.$is_dict()) {
+        } else if(pnd.is_dict()) {
             d.str_cache.k = d.ch_cache.curr;
             d.state = STATE.k;
         } else {
@@ -40,9 +40,9 @@ function handle(d) {
         let pnd = d.stack.lst;
         d.$mv_avcmt_to_avcmt();
         d.$clear_avnd_cache();
-        if(pnd.$is_ary()) {
+        if(pnd.is_ary()) {
             d.$open_nonleaf_nd();
-        } else if(pnd.$is_dict()) {
+        } else if(pnd.is_dict()) {
             d.str_cache.k = d.ch_cache.curr;
             d.state = STATE.k;
         } else {

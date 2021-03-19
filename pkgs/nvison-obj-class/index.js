@@ -168,6 +168,7 @@ class ObjectExpression extends ObjectProperty {
     is_opened() { return(this.open!==empty && this.close === empty)}
     is_closed() {return(this.open!==empty && this.close !== empty)}
     append_child(child) {
+        console.log("--->",child)
         child.chtype = typdef.TYPE_DICT.ObjectExpression.property;
         this.value[child.key] = child.value;
         return(this.$append_child(child))

@@ -26,7 +26,7 @@ function handle(d) {
 
     } else if(state === gtv(STATE.v)) {
         
-        d.setup_leafnd();
+        d.$setup_leafnd();
         d.$change_state_when_end_av();
 
     } else if(state === gtv(STATE.av)) {

@@ -1,11 +1,11 @@
 const {empty} = require("nv-facutil-basic");
-const {D} = require("nvison-parse-d");
+const D = require("nvison-parse-d");
 
 const comma_handle = require("./comma"); 
 const colon_handle = require("./colon");
 const ws_handle = require("./ws");
 const quote_handle = require("./quote");
-const esc_handle = require("./esc");
+const slash_handle = require("./slash");
 const lblk_handle = require("./lblk");
 const rblk_handle = require("./rblk");
 const hash_handle = require("./hash");
@@ -33,8 +33,8 @@ function *gen(g,pre_padding=empty) {
         } else if(d.$is_currch_quote()) {
             quote_handle(d);
             yield(d);
-        } else if(d.$is_currch_esc()) {
-            esc_handle(d);
+        } else if(d.$is_currch_slash()) {
+            slash_handle(d);
             yield(d);
         } else if(d.$is_currch_lblk()) {
             lblk_handle(d);

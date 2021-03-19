@@ -119,6 +119,7 @@ class Cfg {
         this.#quotes[SYM_ADD_SINGLE_RESERVED]('`') 
         this.#commas = new Single(this);
         this.#commas.add(',');
+        this.#commas.add(';');
         this.#colons = new Single(this);
         this.#colons.add(':');
         this.#colons.add('=');
@@ -146,7 +147,9 @@ class Cfg {
         return(ch)
     }
     ////
+    get slash() {return('/')}
     get line_comment() {return('//')}
+    get asterisk() {return('*')}
     get blk_comments() {return(['/*','*/'])}
     get hash () {return('#')}
     get ref  () {return('&')}
@@ -174,6 +177,8 @@ class _Fixed {
         this.hash = cfg.hash;
         this.ref = cfg.ref;
         this.tmpl_quote = cfg.tmpl_quote;
+        this.slash = cfg.slash;
+        this.asterisk = cfg.asterisk;
         this.line_comment = cfg.line_comment;
         this.blk_comments = cfg.blk_comments;
     }

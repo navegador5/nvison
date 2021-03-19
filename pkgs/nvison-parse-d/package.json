@@ -1,6 +1,6 @@
 {
   "name": "nvison-parse-d",
-  "version": "1.0.2",
+  "version": "1.0.19",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "nv-facutil-basic": "^1.0.14",
     "nv-facutil-generator": "^1.0.2",
     "nv-string-stream": "^1.0.4",
-    "nvison-cfg": "^1.0.0",
+    "nvison-cfg": "^1.0.3",
     "nvison-obj-class": "^1.0.1",
     "nvison-obj-typedef": "^1.0.3",
     "nvison-parse-state": "^1.0.6"
