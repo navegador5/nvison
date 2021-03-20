@@ -99,6 +99,9 @@ function  _handle_lblk(that,Cls) {
 }
 
 
+const ROOT_LBLK_CH = Symbol("root_lblk_ch")
+const ROOT_RBLK_CH = Symbol("root_rblk_ch")
+
 class D {
     #state = gtv(STATE.bv);
     #stack = new Stack();
@@ -112,8 +115,10 @@ class D {
         this.ch_cache = {tmp:empty,curr:empty};  
         this.str_cache = {k:empty,v:empty};
         this.cmt_cache = {kcmt:[],bvcmt:[],avcmt:[]}
-        this.avnd_cache = {state:empty,data:empty} 
-        this.stack.push(new ArrayExpression()); 
+        let rtnd = new ArrayExpression();
+        this.stack.push(rtnd);
+        rtnd.open = ROOT_LBLK_CH;
+        this.avnd_cache = {state:AVND_CACHE_STATE_DICT.handling,data:rtnd}
     }
     get state() {return(this.#state)}
     set state(stt) {this.#state = gtv(stt)}
@@ -348,7 +353,7 @@ class D {
         let hrs = empty;
         let ch = this.$next_ch();
         let cache = ""
-        while(!char_ws.is_ws(ch)) {
+        while(!char_ws.is_ws(ch) && !cfg.commas.has(ch)) {
             if(cfg.quotes.has(ch)) {
                 let quoted = char_esc.from_generator(this.g,this.ch_cache.curr);
                 if(quoted.state !== char_esc.STATE_DICT.succ) {
@@ -381,24 +386,15 @@ class D {
         return(pnd.$children().length === 0);         
     }
     //
-    $find_ref(refs) {
+    $find_ref(ref_str) {
         let pnd = this.stack.lst;
-        let refnd = scope.find_ref_val_with_hash(pnd,refs);
+        let nd = pnd.$lstch();
+        let refnd = scope.find_refnd_with_hash(nd,ref_str);
         return(refnd)
     }
     $add_ref_to_parent(refnd) {
         let pnd = this.stack.lst;
-        let nd;
-        let vnd = scope.clone(refnd,this.str_cache.k);
-        if(
-            vnd.type === typdef.TYPE_DICT.ObjectExpression ||
-            vnd.type === typdef.TYPE_DICT.ArrayExpression
-        ) {
-            nd = new _Ref(vnd,this.str_cache.k);
-        }  else {
-            // calc at compile time
-            nd = vnd;
-        }
+        let nd = scope.clone(refnd,this.str_cache.k);
         this.$set_avnd_cache(nd);
         this.$mv_key_to_nd(nd); 
         this.$mv_kcmt_to_kcmt();
@@ -406,6 +402,9 @@ class D {
         pnd.append_child(nd);
     }
 }
+
+D[ROOT_LBLK_CH] = ROOT_LBLK_CH;
+D[ROOT_RBLK_CH] = ROOT_RBLK_CH;
 
 
 module.exports = D 

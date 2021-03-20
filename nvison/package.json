@@ -9,11 +9,11 @@
     "nv-string-comment": "^1.0.3",
     "nv-string-stream": "^1.0.4",
     "nvison-cfg": "^1.0.4",
-    "nvison-obj-class": "^1.0.2",
+    "nvison-obj-class": "^1.0.5",
     "nvison-obj-typedef": "^1.0.3",
-    "nvison-parse-d": "^1.0.19",
-    "nvison-parse-engine": "^1.0.14",
-    "nvison-parse-scope": "^1.0.0",
+    "nvison-parse-d": "^1.0.31",
+    "nvison-parse-engine": "^1.0.15",
+    "nvison-parse-scope": "^1.0.7",
     "nvison-parse-state": "^1.0.7"
   }
 }

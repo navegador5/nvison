@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "nv-facutil-basic": "^1.0.12"
+    "nv-facutil-basic": "^1.0.12",
+    "nvison-obj-class": "^1.0.3"
   },
   "name": "nvison-parse-scope",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

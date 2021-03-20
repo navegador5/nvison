@@ -56,7 +56,7 @@ const parser = require("nvison-parse-engine")
 
 var pp =parser(g)
 var d = (pp.next().value)
-var rt = d.avnd_cache.data.$parent()
+var rt = d.avnd_cache.data;
 for(let i=0;i<5;i++) {d = (pp.next().value)}
 for(let i=0;i<4;i++) {d = (pp.next().value)}
 for(let i=0;i<3;i++) {d = (pp.next().value)}

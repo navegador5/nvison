@@ -33,12 +33,12 @@ function handle(d) {
         } else if(state === gtv(STATE.v)) {
            
             d.$setup_leafnd();
-            let nd = this.avnd_cache.data;
+            let nd = d.avnd_cache.data;
             nd.hashes.add(rslt);
 
         } else if(state === gtv(STATE.av)) {
          
-            let nd = this.avnd_cache.data;
+            let nd = d.avnd_cache.data;
             nd.hashes.add(rslt);
           
         } else {

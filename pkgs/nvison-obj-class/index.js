@@ -40,7 +40,7 @@ class ObjectProperty extends Root {
     is_ele() {return(this.chtype===14)}
     is_dict() {return(this.type===15)}
     is_prop() {return(this.chtype===16)}
-    is_ref()  {return(this.chtype===17)}
+    is_ref()  {return(this.type===17)}
     is_leaf()  {return(!this.is_ary() && !this.is_dict())}
     is_cmt()  {return(this.is_lcmt() || this.is_blcmt())}
     is_lcmt() {return(this.type>=18 && this.type<=22)}
@@ -147,7 +147,11 @@ class ArrayExpression extends ObjectProperty {
     is_closed() {return(this.open!==empty && this.close !== empty)}
     append_child(child) {
         child.chtype = typdef.TYPE_DICT.ArrayExpression.element;
-        this.value.push(child.value);
+        if(child.is_ref()) {
+            this.value.push(child.value.value);
+        } else {
+            this.value.push(child.value);
+        }
         return(this.$append_child(child))
     }
     append_ttcmt(cmt) {
@@ -168,9 +172,12 @@ class ObjectExpression extends ObjectProperty {
     is_opened() { return(this.open!==empty && this.close === empty)}
     is_closed() {return(this.open!==empty && this.close !== empty)}
     append_child(child) {
-        console.log("--->",child)
         child.chtype = typdef.TYPE_DICT.ObjectExpression.property;
-        this.value[child.key] = child.value;
+        if(child.is_ref()) {
+            this.value[child.key] = child.value.value;
+        } else {
+            this.value[child.key] = child.value;
+        }
         return(this.$append_child(child))
     }
     append_ttcmt(cmt) {

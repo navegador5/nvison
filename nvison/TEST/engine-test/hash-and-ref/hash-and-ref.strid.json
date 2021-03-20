@@ -1,0 +1,40 @@
+//use hash '#' to set a alias for ref
+
+"https://127.0.0.1/img.jpg"    #jpg
+"https://127.0.0.1/img.jpg"    #png
+
+
+//multi-hash permitted : the below has two hash
+
+`this is a very long 
+very long string
+...string`                     #long-string   #so-long
+
+
+
+[
+    // different hashes point to the same value
+    &long-string;
+    &so-long;
+
+    /*html-like, use ref '&' to get-value-of  value-with-hash */
+    { 
+        div@1: {
+            attribs:{style={}}
+        } #div ,
+        
+        div@2: &div,
+        div@3: &div,
+        div@4: &div,
+        
+        img@1: &jpg,
+        img@2: &png,
+        
+    } #body;
+    
+    /*repeat the body*/
+    
+    &body;
+    
+] #html
+

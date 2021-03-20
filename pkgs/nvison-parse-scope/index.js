@@ -9,15 +9,16 @@ const {
     StringLiteral,
     ArrayExpression,
     ObjectExpression,
+    CommentLine,
+    CommentBlock,
     _Ref,
 } = require("nvison-obj-class")
 
 
 
-function find_ref_nd_with_hash(pnd,hash) {
-    //从父节点开始查找
+function find_refnd_with_hash(nd,hash) {
     let founded = empty;
-    let prev = pnd
+    let prev = nd; 
     while(prev !== null) {
         if(prev.key === hash) {
             founded = prev;
@@ -41,6 +42,7 @@ function find_ref_nd_with_hash(pnd,hash) {
 }
 
 
+
 function clone(nd,key) {
     if(nd instanceof UndefinedLiteral) {
         return(new UndefinedLiteral('undefined',key))
@@ -58,9 +60,9 @@ function clone(nd,key) {
     ) {
         return(new StringLiteral(nd.value,key))
     } else if(nd instanceof ArrayExpression) {
-        return(nd)
+        return(new _Ref(nd,key))
     } else if(nd instanceof ObjectExpression) {
-        return(nd)
+        return(new _Ref(nd,key))
     } else if(nd instanceof _Ref) {
         nd = _Ref.value;
         return(clone(nd,key))
@@ -71,7 +73,7 @@ function clone(nd,key) {
 
 
 module.exports = {
-    find_ref_nd_with_hash,
+    find_refnd_with_hash,
     clone
 }
 

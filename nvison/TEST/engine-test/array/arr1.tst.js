@@ -1,12 +1,13 @@
 `
-{
-    a:b;
-    c=d;
-    e= {
-        f:[1 2 3],
-        g={key:g,value:200}
-    }
-}
+[
+   (a b c d)
+   (e f <g h>)
+   (
+       <some>
+       <some>
+       <some>
+    )
+]
 `
 
 
@@ -28,14 +29,14 @@ const {
     sync_gen_from_file
 } = require("nv-string-stream");
 
-var g = sync_gen_from_file("./dict.json")
+var g = sync_gen_from_file("./arr1.json")
 
 const parser = require("nvison-parse-engine")
 
 
 var pp =parser(g)
 var d = (pp.next().value)
-var rt = d.avnd_cache.data.$parent()
+var rt = d.avnd_cache.data;
 for(let i=0;i<20;i++) {d = (pp.next().value)}
 for(let i=0;i<20;i++) {d = (pp.next().value)}
 for(let i=0;i<20;i++) {d = (pp.next().value)}
@@ -58,26 +59,19 @@ d = (pp.next().value)
 console.log(JSON.stringify(rt.value,null,4))
 
 /*
-
-rt.value
-
+> rt.value
 [
-    {
-        "a": "b",
-        "c": "d",
-        "e": {
-            "f": [
-                1,
-                2,
-                3
-            ],
-            "g": {
-                "key": "g",
-                "value": 200
-            }
-        }
-    }
+  [
+    [ 'a', 'b', 'c', 'd' ],
+    [ 'e', 'f', [Array] ],
+    [ [Array], [Array], [Array] ]
+  ]
 ]
+> rt.value[0][1]
+[ 'e', 'f', [ 'g', 'h' ] ]
+> rt.value[0][2]
+[ [ 'some' ], [ 'some' ], [ 'some' ] ]
+>
 
 
 */
