@@ -1,0 +1,11 @@
+{
+    arr: [1,2,3,4]  #ary0 ,
+    x: &ary0 ,
+    y: {
+        k0:abcdefghijklmnopqrstuvwxyz,
+        k1:&ary0,
+        k2:&x,            //ref to x, it will be reursively point to [1,2,3,4]
+        k3:&k0,           //along the scope(ArrayBlock or ObjectBlock), it will be point to abcdefghijklmnopqrstuvwxyz
+        k4:&0             //if the ref is a number, it will be the sibling-position, it will be point to abcdefghijklmnopqrstuvwxyz
+    }
+}

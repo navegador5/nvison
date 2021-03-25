@@ -1,0 +1,10 @@
+[
+    abc-def, 
+    'def\tsquoted',
+    "d    quoted",
+    `tock-quoted-line\ntock-quoted-line`,
+    str"@auto-concat@"str
+]
+
+
+

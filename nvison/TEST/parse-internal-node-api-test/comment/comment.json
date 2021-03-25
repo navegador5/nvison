@@ -1,0 +1,25 @@
+{
+    "total_rows": 129  ,  //line comment here
+    /*
+        block comment here
+    */
+    "offset": 0,  //line comment here
+    "rows": [
+        {
+            /*text  comment*/
+            "id": /*@before_val comment*/  "change1_0.6995461115147918",
+             /*text  comment*/
+            "key"   : "change1_0.6995461115147918"  /*@after_val comment*/  ,
+            /*text  comment*/
+            "value" /*key comment*/  : {
+                "rev": "1-e240bae28c7bb3667f02760f6398d508"
+            },
+            /*text  comment*/
+            "doc"  /*key comment*/  : {
+                "_id": "change1_0.6995461115147918",
+                "_rev": "1-e240bae28c7bb3667f02760f6398d508",
+                "hello": 1
+            }
+        }
+    ]
+}

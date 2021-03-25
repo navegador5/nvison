@@ -1,7 +1,7 @@
 //use hash '#' to set a alias for ref
 
 "https://127.0.0.1/img.jpg"    #jpg
-"https://127.0.0.1/img.jpg"    #png
+"https://127.0.0.1/img.png"    #png
 
 
 //multi-hash permitted : the below has two hash

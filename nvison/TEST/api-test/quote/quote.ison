@@ -1,0 +1,8 @@
+[
+    a"\t\v\t"b,
+    "cde",
+    fgh,
+    'ijk',
+    %lmnopq%,
+    `rst \n uvw \n xyz`
+]

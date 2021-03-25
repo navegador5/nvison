@@ -57,7 +57,7 @@ rt.value
 
 [
     "https://127.0.0.1/img.jpg",
-    "https://127.0.0.1/img.jpg",
+    "https://127.0.0.1/img.png",
     "this is a very long \nvery long string\n...string",
     [
         "this is a very long \nvery long string\n...string",

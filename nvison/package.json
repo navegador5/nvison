@@ -1,19 +1,49 @@
 {
+  "name": "nvison",
+  "version": "1.0.0",
+  "description": "another json-like structure",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/navegador5/nvison.git"
+  },
+  "keywords": [
+    "bin",
+    "hex",
+    "oct",
+    "scientific-notation",
+    "bigInt",
+    "Infinity",
+    "NaN",
+    "concatable-string",
+    "comments",
+    "hash",
+    "ref",
+    "optional-quote",
+    "configurable-colons",
+    "configurable-commas",
+    "configurable-quotes",
+    "configurable-array-blk",
+    "configurable-object-blk"
+  ],
+  "files": ["BIN/*"],
+  "bin":{
+      "nvison_plain_parse":"BIN/plain-parse.js"
+  },  
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/navegador5/nvison/issues"
+  },
+  "homepage": "https://github.com/navegador5/nvison#readme",
   "dependencies": {
-    "ndtreejs": "^1.3.22",
-    "nv-char-escape": "^1.0.9",
-    "nv-char-whitespace": "^1.0.3",
-    "nv-facutil-basic": "^1.0.15",
-    "nv-facutil-generator": "^1.0.0",
-    "nv-string-basic": "^1.0.20",
+    "minimist": "^1.2.5",
     "nv-string-comment": "^1.0.3",
-    "nv-string-stream": "^1.0.4",
-    "nvison-cfg": "^1.0.4",
-    "nvison-obj-class": "^1.0.5",
-    "nvison-obj-typedef": "^1.0.3",
-    "nvison-parse-d": "^1.0.31",
-    "nvison-parse-engine": "^1.0.15",
-    "nvison-parse-scope": "^1.0.7",
-    "nvison-parse-state": "^1.0.7"
+    "nv-string-stream": "^1.0.9",
+    "nvison-cfg": "^1.0.5",
+    "nvison-parse-internal": "^1.0.22"
   }
 }

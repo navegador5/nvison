@@ -1,0 +1,15 @@
+defun last-state <rewindable>
+【
+    let
+    [
+        (size <rewind-count rewindable>)
+    ]
+    [
+        if<zerop size> <values nil nil>
+        (
+            values
+            <aref 《rewind-store rewindable》 《1 - size》>
+            t
+        )
+    ]
+】
