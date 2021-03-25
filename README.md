@@ -444,6 +444,74 @@ examples
 - hash and ref performance is BAD when the ison-file is too Big,such as 4M+
 
 
+#### valid and invalid
+
+    //valid 
+    {  #root
+       
+       key0: {k0:v0, k1:&root}  //ref to ancestor
+       
+       key1: value1,
+
+       key2: &key0             //ref to preceding-sibling 
+
+    } //will  be  {key0: {k0:v0,k1:<Circular>}, key1:value1,key2:{k0:v0,k1:<Circular>}}
+
+
+    {
+        ....
+        key0  :  value0 #hash-after-val ,
+
+        key1 : &hash-after-val
+        ....
+    }   // will be  {key0:value0, key1:value0}
+
+
+
+    /* very very long string */  #comment
+
+    [ &comment, &comment ,&comment]   //valid to ref to text-node-position-comment
+
+     
+
+
+
+
+    //invalid
+
+    {
+        key0  #hash-after-key-will-be-treated-as-comment  :  value0
+    }
+
+
+    {
+        key0  :  #hash-before-value-will-be-treated-as-comment value0
+    }
+
+
+    {
+        key0: &fsib,            //ref to following-sibling have no effect
+        key1: value1,
+        key2: value2 #fsib,
+
+        key3: {
+            k30:&des,           //ref to descendant have no effect
+            k31: [
+               des0,
+               des1,
+               des2  #des
+            ]
+        }
+
+    }
+
+    {
+        k :  /*before_val*/ #hash  v     //hash between colon and value have no effect  
+    }
+
+    
+
+
 #### example 1
 
   
@@ -813,6 +881,11 @@ IS IT FAST?
 - for error tolerance and configurable operators
 
 
+
+RESTRICT
+========
+- BigFloat NOT supported
+- coz currently only QuickJS provide that API .
 
 LICENSE
 =======

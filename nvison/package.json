@@ -1,6 +1,6 @@
 {
   "name": "nvison",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "another json-like structure",
   "main": "index.js",
   "scripts": {
@@ -29,10 +29,12 @@
     "configurable-array-blk",
     "configurable-object-blk"
   ],
-  "files": ["BIN/*"],
-  "bin":{
-      "nvison_plain_parse":"BIN/plain-parse.js"
-  },  
+  "files": [
+    "BIN/*"
+  ],
+  "bin": {
+    "nvison_plain_parse": "BIN/plain-parse.js"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
