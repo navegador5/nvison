@@ -16,38 +16,26 @@ function handle(d) {
 
     } else if(state === gtv(STATE.ak)) {
 
-        d.$abandon_key();
+        d.$refresh_key();
+        d.state = STATE.k
 
     } else if(state === gtv(STATE.bv)) {
 
+        //this function will change state itself
         d.$open_nonleaf_nd();
 
     } else if(state === gtv(STATE.v)) {
         
-        let pnd = d.stack.lst;
         d.$setup_leafnd();
-        if(pnd.is_ary()) {
-            d.$open_nonleaf_nd();
-        } else if(pnd.is_dict()) {
-            d.str_cache.k = d.ch_cache.curr;
-            d.state = STATE.k;
-        } else {
-            //impossible
-        }
+        d.$change_state_when_end_av();
+        d.__unshift_g(d.ch_cache.curr);
 
     } else if(state === gtv(STATE.av)) {
-        
-        let pnd = d.stack.lst;
+       
+
         d.$mv_avcmt_to_avcmt();
-        d.$clear_avnd_cache();
-        if(pnd.is_ary()) {
-            d.$open_nonleaf_nd();
-        } else if(pnd.is_dict()) {
-            d.str_cache.k = d.ch_cache.curr;
-            d.state = STATE.k;
-        } else {
-            //impossible
-        }
+        d.$change_state_when_end_av();
+        d.__unshift_g(d.ch_cache.curr);
 
     } else {
         //impossible

@@ -38,7 +38,6 @@ class Pair {
         if(this.size <2) {
             throw(ERROR_DICT.cant_be_empty)
         } else {
-            this.#ctrl.validate(l);
             let r = this.#lmp.get(l)
             this.#lmp.delete(l)
             this.#rmp.delete(r)
@@ -48,7 +47,6 @@ class Pair {
         if(this.size <2) {
             throw(ERROR_DICT.cant_be_empty)
         } else {
-            this.#ctrl.validate(r);
             let l = this.#rmp.get(r)
             this.#rmp.delete(r)
             this.#lmp.delete(l)
@@ -85,7 +83,6 @@ class Single {
         if(this.size <2) {
             throw(ERROR_DICT.cant_be_empty)
         } else {
-            this.#ctrl.validate(v);
             this.#st.delete(v)
         }
     }

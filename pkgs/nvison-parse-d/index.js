@@ -36,6 +36,26 @@ const cfg = require("nvison-cfg");
 const scope = require("nvison-parse-scope");
 
 
+function * _creat_reverse_gen(arr) {
+    while(arr.length>0) {
+        let ch = arr.pop();
+        yield(ch);
+    }
+}
+
+function _get_quoted(that) {
+    let quoted;
+    if(that.__is_sync_mode()) {
+        quoted = char_esc.from_generator(that.g,that.ch_cache.curr);
+    } else {
+        quoted = char_esc.from_generator(
+            _creat_reverse_gen(that.unshift_cache),
+            that.ch_cache.curr
+        )
+    }
+    return(quoted)
+}
+
 function _handle_quote_eof(that,quoted,quote) {
     that.lefted.type = LEFTED_TYPE.quote;
     that.lefted.data  = {
@@ -70,9 +90,22 @@ function _handle_blkcmt_eof(that,cmtd,lefted_typ) {
 }
 
 
+function _get_cmtd(that,from_gen) {
+    let cmtd;
+    if(that.__is_sync_mode()) {
+        cmtd = from_gen(that.g,that.ch_cache.curr);
+    } else {
+        cmtd = from_gen(
+            _creat_reverse_gen(that.unshift_cache),
+            that.ch_cache.curr
+        )
+    }
+    return(cmtd)
+}
+
 
 function _handle_cmt(that,Cls,from_gen,lefted_typ) {
-    let cmtd = from_gen(that.g);
+    let cmtd = _get_cmtd(that,from_gen);
     if(cmtd.state !== cmt.STATE_DICT.succ) {
         let mn = (Cls === CommentLine)?_handle_lcmt_eof:_handle_blkcmt_eof
         mn(that,cmtd,lefted_typ);
@@ -105,7 +138,7 @@ const ROOT_RBLK_CH = Symbol("root_rblk_ch")
 class D {
     #state = gtv(STATE.bv);
     #stack = new Stack();
-    constructor(g,pre_padding=empty) {
+    constructor(g,pre_padding=' ') {
         if(pre_padding !== empty) {
             let pg = sync_gen_from_str(pre_padding);
             g = syncg_unshift(g,pg);
@@ -113,19 +146,40 @@ class D {
         this.g = g;
         this.lefted = {type:empty,data:empty};
         this.ch_cache = {tmp:empty,curr:empty};  
-        this.str_cache = {k:empty,v:empty};
+        this.str_cache = {k:empty,v:empty,maybe_vquote:empty};
         this.cmt_cache = {kcmt:[],bvcmt:[],avcmt:[]}
         let rtnd = new ArrayExpression();
         this.stack.push(rtnd);
         rtnd.open = ROOT_LBLK_CH;
         this.avnd_cache = {state:AVND_CACHE_STATE_DICT.handling,data:rtnd}
+        this.unshift_cache = new Stack();
+        this.mode = 'sync'
     }
+    ////
+    __use_sync_mode()  {this.mode = 'sync'}
+    __use_async_mode() {this.mode = 'async'}
+    __is_sync_mode() {return(this.mode === 'sync')}
+    __is_async_mode() {return(this.mode === 'async')}
+    ////
+    __unshift_g(pres) {
+        pres = pres??this.ch_cache.curr;
+        for(let ch of pres) {this.unshift_cache.unshift(ch)}
+    }
+    ////
+    $has_yield_sign()    {return(this.avnd_cache.state === AVND_CACHE_STATE_DICT.handled)}
+    $set_yield_sign()    {this.avnd_cache.state = AVND_CACHE_STATE_DICT.handled}
+    $clear_yield_sign()  {this.avnd_cache.state = AVND_CACHE_STATE_DICT.handling}
+    ////
     get state() {return(this.#state)}
     set state(stt) {this.#state = gtv(stt)}
     get stack() {return(this.#stack)}
     //
     $next_ch() {
-        this.ch_cache.curr = this.g.next().value;
+        if(this.unshift_cache.length>0){
+            this.ch_cache.curr = this.unshift_cache.pop()
+        } else {
+            this.ch_cache.curr = this.g.next().value;
+        }
         return(this.ch_cache.curr)
     }
     //
@@ -139,7 +193,8 @@ class D {
     //
     $is_currch_colon() {return(cfg.colons.has(this.ch_cache.curr))}
     //
-    $is_currch_ws() {return(char_ws.is_ws(this.ch_cache.curr))}
+    $is_currch_ws() {
+        return(char_ws.is_ws(this.ch_cache.curr))}
     //
     $is_currch_quote() {return(cfg.quotes.has(this.ch_cache.curr))}
     //
@@ -158,48 +213,62 @@ class D {
     //
     $is_currch_ref() {return(cfg.ref === this.ch_cache.curr)}
     //
-    $clear_avnd_cache() {
-        this.avnd_cache.data = empty;
-        this.avnd_cache.state = empty;
-    }
-    //
     $mv_avcmt_to_avcmt() {
         let nd = this.avnd_cache.data;
         nd.avcmt = this.cmt_cache.avcmt;
         this.cmt_cache.avcmt = [];
     }
     //
-    $change_state_when_end_av() {
+    $change_state_when_end_av(s=empty,quote=empty) {
         let pnd = this.stack.lst;
         if(pnd.is_ary()) {
-            this.state = STATE.bv
+            if(s === empty) {
+                this.state = STATE.bv
+            } else {
+                this.state = STATE.v;
+                this.str_cache.v = s;
+                if(quote === empty) {
+                } else {
+                    this.str_cache.maybe_vquote = quote
+                }
+            }
         } else {
-            this.state = STATE.bk
+            if(s === empty) {
+                this.state = STATE.bk
+            } else {
+                this.state = STATE.k;
+                this.str_cache.k = s;
+            }
         }
         return(this.state)
     }
     //
     $vcache_to_nd() {
         let v = this.str_cache.v;
-        let rslt = parse0(
-            v,
-            {only_value:false,with_value:true,with_type:true,unknown_as_string:true}
-        );
         let nd ;
-        if(rslt.type === typdef.TYPE_DICT.UndefinedLiteral) {
-            nd = new UndefinedLiteral(this.k);
-        } else if(rslt.type === typdef.TYPE_DICT.NullLiteral) {
-            nd = new NullLiteral(this.k);
-        } else if(rslt.type === typdef.TYPE_DICT.BooleanLiteral.TrueLiteral) {
-            nd = new BooleanLiteral("true",this.k);
-        } else if(rslt.type === typdef.TYPE_DICT.BooleanLiteral.FalseLiteral) {
-            nd = new BooleanLiteral("false",this.k);
-        } else if(rslt.type === typdef.TYPE_DICT.StringLiteral) {
-            nd = new StringLiteral(rslt.value,this.k);
+        if(this.str_cache.maybe_vquote === empty){
+            let rslt = parse0(
+                v,
+                {only_value:false,with_value:true,with_type:true,unknown_as_string:true}
+            );
+            if(rslt.type === typdef.TYPE_DICT.UndefinedLiteral) {
+                nd = new UndefinedLiteral(this.k);
+            } else if(rslt.type === typdef.TYPE_DICT.NullLiteral) {
+                nd = new NullLiteral(this.k);
+            } else if(rslt.type === typdef.TYPE_DICT.BooleanLiteral.TrueLiteral) {
+                nd = new BooleanLiteral("true",this.k);
+            } else if(rslt.type === typdef.TYPE_DICT.BooleanLiteral.FalseLiteral) {
+                nd = new BooleanLiteral("false",this.k);
+            } else if(rslt.type === typdef.TYPE_DICT.StringLiteral) {
+                nd = new StringLiteral(rslt.value,this.k);
+            } else {
+                nd = new NumericLiteral(rslt,this.k);
+            }
         } else {
-            nd = new NumericLiteral(rslt,this.k);
+            nd = new StringLiteral(v,this.k);
         }
         this.str_cache.v = empty;
+        this.str_cache.maybe_vquote = empty;
         return(nd)
     }
     //
@@ -239,36 +308,9 @@ class D {
         pnd.append_child(nd);
     }
     //
-    $change_state_when_end_av_with_str() {
-        let pnd = this.stack.lst;
-        if(pnd.is_ary()) {
-            this.state = STATE.v
-        } else {
-            this.state = STATE.k
-        }
-        return(this.state)
-    }
-    //
-    $end_av_with_str(s=empty,should_skip=false) {
-        s = (s===empty)?this.ch_cache.curr:s;
-        this.$mv_avcmt_to_avcmt();
-        this.$clear_avnd_cache();
-        let pnd = this.stack.lst;
-        if(pnd.is_ary()) {
-            this.state = STATE.v
-            this.str_cache.v = s; 
-        } else {
-            if(should_skip) { 
-                this.state = STATE.bk;
-            } else {
-                this.state = STATE.k;
-                this.str_cache.k = s;
-            }
-        }        
-    }
     //
     $handle_quote() {
-        let quoted = char_esc.from_generator(this.g,this.ch_cache.curr);
+        let quoted = _get_quoted(this);
         if(quoted.state !== char_esc.STATE_DICT.succ) {
             _handle_quote_eof(quoted,this.ch_cache.curr);
             return(empty)
@@ -277,14 +319,13 @@ class D {
         }
     }
     //
-    $abandon_key(s=empty) {
+    $refresh_key(s=empty) {
         if(s === empty) {
-            this.str_cache.k = d.ch_cache.curr;
+            this.str_cache.k = this.ch_cache.curr;
         } else {
             this.str_cache.k = s;
         }
         this.cmt_cache.kcmt = [];
-        this.state = STATE.k
     }
     //
     $handle_lcmt() {
@@ -320,12 +361,6 @@ class D {
         this.cmt_cache.avcmt = [];
     }
     //
-    $unshift_g(lefted) {
-        lefted = lefted??this.ch_cache.curr;
-        let pg = sync_gen_from_str(lefted);
-        this.g = syncg_unshift(this.g,pg);
-    }
-    //
     $open_nonleaf_nd() {
         if(cfg.array_blks.lhas(this.ch_cache.curr)) {
             return(_handle_lblk(this,ArrayExpression))
@@ -355,7 +390,7 @@ class D {
         let cache = ""
         while(!char_ws.is_ws(ch) && !cfg.commas.has(ch)) {
             if(cfg.quotes.has(ch)) {
-                let quoted = char_esc.from_generator(this.g,this.ch_cache.curr);
+                let quoted = _get_quoted(this);
                 if(quoted.state !== char_esc.STATE_DICT.succ) {
                     _handle_quote_eof(quoted,this.ch_cache.curr);
                     if(mode === cfg.hash) {
@@ -377,6 +412,7 @@ class D {
                 //collecting
             }
         }
+        this.__unshift_g(ch);
         hrs = cache;
         return(hrs)
     }
@@ -389,6 +425,7 @@ class D {
     $find_ref(ref_str) {
         let pnd = this.stack.lst;
         let nd = pnd.$lstch();
+        if(nd === null) {nd = pnd}
         let refnd = scope.find_refnd_with_hash(nd,ref_str);
         return(refnd)
     }
@@ -405,6 +442,6 @@ class D {
 
 D[ROOT_LBLK_CH] = ROOT_LBLK_CH;
 D[ROOT_RBLK_CH] = ROOT_RBLK_CH;
-
+D['MODES'] = ['sync','async'] 
 
 module.exports = D 

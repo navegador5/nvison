@@ -134,6 +134,23 @@ function _set_cmt_type_to_tt(cmt) {
     }
 }
 
+
+function _new_ttcmt_data(that,cmt) {
+    let lsib = that.$lsib();
+    return({
+        lsib,
+        data:cmt
+    })
+}
+
+function _append_ttcmt(that,cmt) {
+    _set_cmt_type_to_tt(cmt);
+    let cmtwrap = _new_ttcmt_data(that,cmt);
+    that.ttcmt.push(cmtwrap);
+    return(cmtwrap);
+}
+
+
 class ArrayExpression extends ObjectProperty {
     constructor(key=empty) {
         super(key);
@@ -141,6 +158,7 @@ class ArrayExpression extends ObjectProperty {
         this.type = typdef.TYPE_DICT.ArrayExpression._self;
         this.open = empty;
         this.close = empty;
+        this.ttcmt = [];
     }
     is_inited() {return(this.open===empty && this.close === empty)}
     is_opened() { return(this.open!==empty && this.close === empty)}
@@ -154,10 +172,7 @@ class ArrayExpression extends ObjectProperty {
         }
         return(this.$append_child(child))
     }
-    append_ttcmt(cmt) {
-        _set_cmt_type_to_tt(cmt);
-        return(this.$append_child(cmt));
-    }
+    append_ttcmt(cmt) {return(_append_ttcmt(this,cmt))}
 }
 
 class ObjectExpression extends ObjectProperty {
@@ -167,6 +182,7 @@ class ObjectExpression extends ObjectProperty {
         this.type = typdef.TYPE_DICT.ObjectExpression._self;
         this.open = empty;
         this.close = empty;
+        this.ttcmt = [];
     }
     is_inited() {return(this.open===empty && this.close === empty)}
     is_opened() { return(this.open!==empty && this.close === empty)}
@@ -180,11 +196,10 @@ class ObjectExpression extends ObjectProperty {
         }
         return(this.$append_child(child))
     }
-    append_ttcmt(cmt) {
-        _set_cmt_type_to_tt(cmt);
-        return(this.$append_child(cmt));
-    }
+    append_ttcmt(cmt) {return(_append_ttcmt(this,cmt))}
 }
+
+
 
 class _Ref extends ObjectProperty {
     constructor(nd,key=empty) {

@@ -8,7 +8,6 @@ function handle(d) {
     if(state === gtv(STATE.bk)) {
         //do nothing
     } else if(state === gtv(STATE.k)) {
-
         d.state = STATE.bv;
 
     } else if(state === gtv(STATE.ak)) {
@@ -20,10 +19,13 @@ function handle(d) {
     } else if(state === gtv(STATE.v)) {
         
         d.str_cache.v = d.str_cache.v + d.ch_cache.curr;
+        d.str_cache.maybe_vquote = empty;
 
     } else if(state === gtv(STATE.av)) {
-        
-        d.$end_av_with_str(empty,true)
+
+        d.$mv_avcmt_to_avcmt();
+        //bk or bv depends on pnd type
+        d.$change_state_when_end_av();
 
     } else {
         //impossible

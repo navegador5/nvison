@@ -64,7 +64,7 @@ function clone(nd,key) {
     } else if(nd instanceof ObjectExpression) {
         return(new _Ref(nd,key))
     } else if(nd instanceof _Ref) {
-        nd = _Ref.value;
+        nd = nd.value;
         return(clone(nd,key))
     } {
         return(empty)

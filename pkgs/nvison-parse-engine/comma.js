@@ -26,13 +26,13 @@ function handle(d) {
 
     } else if(state === gtv(STATE.v)) {
         
+        //v-to-bk or v-to-bv
         d.$setup_leafnd();
         d.$change_state_when_end_av();
 
     } else if(state === gtv(STATE.av)) {
         
         d.$mv_avcmt_to_avcmt();
-        d.$clear_avnd_cache();
         d.$change_state_when_end_av();
 
     } else {

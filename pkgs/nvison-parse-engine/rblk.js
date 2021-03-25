@@ -17,7 +17,8 @@ function nomatch_handle(d) {
 
     } else if(state === gtv(STATE.ak)) {
 
-        d.$abandon_key(d.ch_cache.curr);
+        d.$refresh_key(d.ch_cache.curr);
+        d.state = STATE.k;
 
     } else if(state === gtv(STATE.bv)) {
 
@@ -27,10 +28,12 @@ function nomatch_handle(d) {
     } else if(state === gtv(STATE.v)) {
 
         d.str_cache.v = d.str_cache.v + d.ch_cache.curr;
+        d.str_cache.maybe_vquote = empty;
 
     } else if(state === gtv(STATE.av)) {
 
-        d.$end_av_with_str(d.ch_cache.curr);
+        d.$mv_avcmt_to_avcmt();
+        d.$change_state_when_end_av(d.ch_cache.curr);
 
     } else {
         //impossible
@@ -53,7 +56,7 @@ function match_handle(d) {
 
     } else if(state === gtv(STATE.ak)) {
 
-        d.$abandon_key();
+        d.$refresh_key();
         d.str_cache.k =empty;
         d.$close_nonleaf_nd();
 
@@ -67,14 +70,19 @@ function match_handle(d) {
     } else if(state === gtv(STATE.v)) {
 
         d.$setup_leafnd();
-        d.$close_nonleaf_nd();
+        d.state = STATE.av;
+        d.__unshift_g(d.ch_cache.curr);
+
 
     } else if(state === gtv(STATE.av)) {
-      
-        d.$mv_avcmt_to_avcmt();
-        d.$clear_avnd_cache();
-        d.$close_nonleaf_nd();
-
+        if(!d.$has_yield_sign()) {
+            d.$mv_avcmt_to_avcmt();
+            d.$set_yield_sign();
+            d.__unshift_g(d.ch_cache.curr);
+        } else {
+            d.$clear_yield_sign();
+            d.$close_nonleaf_nd();
+        }
     } else {
         //impossible
         //exception states will be terminated in main loop

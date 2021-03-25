@@ -9,6 +9,7 @@ function handle(d) {
     let state = d.state;
     let rslt = d.$get_hash_or_ref(cfg.hash);
     if(rslt === empty) {
+        //hash-eof
     } else {
         let cond = d.$is_hash_of_pnd();
         let pnd = d.stack.lst;

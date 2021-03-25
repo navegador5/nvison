@@ -31,7 +31,7 @@ function *gen(g,pre_padding=empty) {
             ws_handle(d);
             yield(d);
         } else if(d.$is_currch_quote()) {
-            quote_handle(d);
+            quote_handle(d,d.ch_cache.curr);
             yield(d);
         } else if(d.$is_currch_slash()) {
             slash_handle(d);

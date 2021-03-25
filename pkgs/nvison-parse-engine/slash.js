@@ -10,10 +10,11 @@ function handle_cmt_engine(d,handler_name)  {
     let state = d.state;
     let cmtnd = d[handler_name]();
     if(cmtnd === empty) {
+        //slash-eof
     } else {
         let pnd = d.stack.lst;
         if(state === gtv(STATE.bk)) {
-           
+          
             pnd.append_ttcmt(cmtnd);
 
         } else if(state === gtv(STATE.k)) {
@@ -65,37 +66,40 @@ function handle_lc(d) {return(handle_cmt_engine(d,'$handle_lcmt'))}
 function handle_blkc(d) {return(handle_cmt_engine(d,'$handle_blkcmt'))}
 
 function handle_others(d) {
+    let state = d.state;
     if(state === gtv(STATE.bk)) {
         
-        d.$unshift_g();
+        d.__unshift_g(d.ch_cache.curr);
         d.str_cache.k = cfg.slash;
         d.state = STATE.k;
 
     } else if(state === gtv(STATE.k)) {
 
-        d.$unshift_g();
+        d.__unshift_g(d.ch_cache.curr);
         d.str_cache.k = d.str_cache.k + cfg.slash;
 
     } else if(state === gtv(STATE.ak)) {
           
-        d.$unshift_g();
-        d.$abandon_key(cfg.slash);
+        d.__unshift_g(d.ch_cache.curr);
+        d.$refresh_key(cfg.slash);
         d.state = STATE.k;
 
     } else if(state === gtv(STATE.bv)) {
 
-        d.$unshift_g();
+        d.__unshift_g(d.ch_cache.curr);
         d.str_cache.v = cfg.slash;
         d.state = STATE.v;
 
     } else if(state === gtv(STATE.v)) {
 
-        d.$unshift_g();
+        d.__unshift_g(d.ch_cache.curr);
         d.str_cache.v = d.str_cache.v + cfg.slash;
+        d.str_cache.maybe_vquote = empty;
 
     } else if(state === gtv(STATE.av)) {
 
-        d.$end_av_with_str(cfg.slash,false);
+        d.$mv_avcmt_to_avcmt();
+        d.$change_state_when_end_av(cfg.slash);
 
     } else {
         //impossible

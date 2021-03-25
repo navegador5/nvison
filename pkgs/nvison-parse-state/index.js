@@ -119,6 +119,9 @@ function get_hash_naked_eofv_with_code(code) {return(code+5)}
 function get_ref_quote_eofv_with_code(code) {return(code+9)}
 function get_ref_naked_eofv_with_code(code) {return(code+8)}
 
+function is_eofv(code) {return(code%10 !==0)}
+
+
 const LEFTED_TYPE = {
     backslash:0,
     lcmt:1,
@@ -130,6 +133,22 @@ const LEFTED_TYPE = {
 const AVND_CACHE_STATE_DICT = {
     handling:0,
     handled:1
+}
+
+function is_should_yield(d,prev,curr) {
+    let STATE = STATE_DICT;
+    let cond = (
+        d.$has_yield_sign() ||
+        is_eofv(curr) ||
+        (prev === gtv(STATE.av) && curr === gtv(STATE.bv)) ||
+        (prev === gtv(STATE.av) && curr === gtv(STATE.bk)) ||
+        (prev === gtv(STATE.av) && curr === gtv(STATE.k)) ||
+        (prev === gtv(STATE.av) && curr === gtv(STATE.v)) ||
+        (prev === gtv(STATE.av) && curr === gtv(STATE.ak)) ||
+        (prev === gtv(STATE.v) && curr === gtv(STATE.bv)) ||
+        (prev === gtv(STATE.v) && curr === gtv(STATE.bk))
+    )
+    return(cond)
 }
 
 
@@ -144,5 +163,7 @@ module.exports = {
     get_ref_quote_eofv_with_code,
     get_ref_naked_eofv_with_code,
     LEFTED_TYPE,
-    AVND_CACHE_STATE_DICT
+    AVND_CACHE_STATE_DICT,
+    is_eofv,
+    is_should_yield
 }
