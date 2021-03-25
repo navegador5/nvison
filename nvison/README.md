@@ -25,6 +25,11 @@ install
 =======
 - npm install nvison
 
+requirements
+============
+
+- node need V15+ , coz it USE Event-Target  
+
 usage
 =====
 
@@ -842,7 +847,7 @@ parse
         c=d;
         e= {
             f:[1 2 3],
-            g= ^ key:g,value:200 $
+            g= { key:g,value:200 }
         }
     }
     
@@ -858,9 +863,10 @@ parse
                 2,
                 3
             ],
-            "g": "^",
-            "key": "g",
-            "value": 200
+            "g": {
+                "key": "g",
+                "value": 200
+            }
         }
     }
 
