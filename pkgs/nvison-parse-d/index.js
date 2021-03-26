@@ -252,20 +252,20 @@ class D {
                 {only_value:false,with_value:true,with_type:true,unknown_as_string:true}
             );
             if(rslt.type === typdef.TYPE_DICT.UndefinedLiteral) {
-                nd = new UndefinedLiteral(this.k);
+                nd = new UndefinedLiteral(this.str_cache.k);
             } else if(rslt.type === typdef.TYPE_DICT.NullLiteral) {
-                nd = new NullLiteral(this.k);
+                nd = new NullLiteral(this.str_cache.k);
             } else if(rslt.type === typdef.TYPE_DICT.BooleanLiteral.TrueLiteral) {
-                nd = new BooleanLiteral("true",this.k);
+                nd = new BooleanLiteral("true",this.str_cache.k);
             } else if(rslt.type === typdef.TYPE_DICT.BooleanLiteral.FalseLiteral) {
-                nd = new BooleanLiteral("false",this.k);
+                nd = new BooleanLiteral("false",this.str_cache.k);
             } else if(rslt.type === typdef.TYPE_DICT.StringLiteral) {
-                nd = new StringLiteral(rslt.value,this.k);
+                nd = new StringLiteral(rslt.value,this.str_cache.k);
             } else {
-                nd = new NumericLiteral(rslt,this.k);
+                nd = new NumericLiteral(rslt,this.str_cache.k);
             }
         } else {
-            nd = new StringLiteral(v,this.k);
+            nd = new StringLiteral(v,this.str_cache.k);
         }
         this.str_cache.v = empty;
         this.str_cache.maybe_vquote = empty;
