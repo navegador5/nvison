@@ -1,7 +1,12 @@
 const {empty,SimpleStack} = require("nv-facutil-basic");
 const Stack = SimpleStack;
 
-const {sync_gen_from_str} = require("nv-string-stream");
+const {
+    get_next_pos,
+    sync_gen_from_str,
+} = require("nv-string-stream");
+
+
 const {syncg_unshift} = require("nv-facutil-generator");
 const char_esc = require("nv-char-escape").cmmn;
 const char_ws = require("nv-char-whitespace");
@@ -135,17 +140,27 @@ function  _handle_lblk(that,Cls) {
 const ROOT_LBLK_CH = Symbol("root_lblk_ch")
 const ROOT_RBLK_CH = Symbol("root_rblk_ch")
 
+function _next_ch(that) {
+   let old_pos = that.cursor.curr;
+   let new_pos = get_next_pos(that.input.str,old_pos);
+   that.cursor.prev = old_pos;
+   if(new_pos !== undefined) {
+       that.cursor.curr = new_pos;
+   } else {
+       that.cursor.curr = empty;
+   }
+}
+
+
 class D {
     #state = gtv(STATE.bv);
     #stack = new Stack();
-    constructor(g,pre_padding=' ') {
-        if(pre_padding !== empty) {
-            let pg = sync_gen_from_str(pre_padding);
-            g = syncg_unshift(g,pg);
-        }
-        this.g = g;
+    constructor(s) {
+        ////
+        this.input    =   {str:s,g:g} 
+        this.cursor   =   {prev:empty, curr:0}
+        ////
         this.lefted = {type:empty,data:empty};
-        this.ch_cache = {tmp:empty,curr:empty};  
         this.str_cache = {k:empty,v:empty,maybe_vquote:empty};
         this.cmt_cache = {kcmt:[],bvcmt:[],avcmt:[]}
         let rtnd = new ArrayExpression();
@@ -156,16 +171,6 @@ class D {
         this.mode = 'sync'
     }
     ////
-    __use_sync_mode()  {this.mode = 'sync'}
-    __use_async_mode() {this.mode = 'async'}
-    __is_sync_mode() {return(this.mode === 'sync')}
-    __is_async_mode() {return(this.mode === 'async')}
-    ////
-    __unshift_g(pres) {
-        pres = pres??this.ch_cache.curr;
-        for(let ch of pres) {this.unshift_cache.unshift(ch)}
-    }
-    ////
     $has_yield_sign()    {return(this.avnd_cache.state === AVND_CACHE_STATE_DICT.handled)}
     $set_yield_sign()    {this.avnd_cache.state = AVND_CACHE_STATE_DICT.handled}
     $clear_yield_sign()  {this.avnd_cache.state = AVND_CACHE_STATE_DICT.handling}
@@ -173,76 +178,60 @@ class D {
     get state() {return(this.#state)}
     set state(stt) {this.#state = gtv(stt)}
     get stack() {return(this.#stack)}
-    //
-    $next_ch() {
-        if(this.unshift_cache.length>0){
-            this.ch_cache.curr = this.unshift_cache.pop()
-        } else {
-            this.ch_cache.curr = this.g.next().value;
-        }
-        return(this.ch_cache.curr)
-    }
-    //
-    $is_currch_eof() { return(this.ch_cache.curr === undefined)}
+    /////
+    $next_ch()  { _next_ch(that)}
+    get ch()    { return(this.input.str.slice(this.cursor.prev,this.cursor.curr))}
+    ////
+    $is_currch_eof() { return(this.cursor.curr === empty)}
     $handle_main_eof() {
         this.state = _STATE.get_main_eofv_with_code(this.state)
         return(this)
     }
-    //
-    $is_currch_comma() {return(cfg.commas.has(this.ch_cache.curr))}
-    //
-    $is_currch_colon() {return(cfg.colons.has(this.ch_cache.curr))}
-    //
-    $is_currch_ws() {
-        return(char_ws.is_ws(this.ch_cache.curr))}
-    //
-    $is_currch_quote() {return(cfg.quotes.has(this.ch_cache.curr))}
-    //
-    $is_currch_slash() { return(this.ch_cache.curr === cfg.slash)}
-    $is_currch_asterisk() {return(this.ch_cache.curr === cfg.asterisk)}
-    //
-    $is_currch_ary_lblk() {return(cfg.array_blks.lhas(this.ch_cache.curr))}
-    $is_currch_obj_lblk() {return(cfg.obj_blks.lhas(this.ch_cache.curr))}
+    ////
+    $is_currch_comma() {return(cfg.commas.has(this.ch))}
+    $is_currch_colon() {return(cfg.colons.has(this.ch))}
+    $is_currch_ws() {return(char_ws.is_ws(this.ch))}
+    $is_currch_quote() {return(cfg.quotes.has(this.ch))}
+    $is_currch_slash() { return(this.ch === cfg.slash)}
+    $is_currch_asterisk() {return(this.ch === cfg.asterisk)}
+    $is_currch_ary_lblk() {return(cfg.array_blks.lhas(this.ch))}
+    $is_currch_obj_lblk() {return(cfg.obj_blks.lhas(this.ch))}
     $is_currch_lblk() {return(this.$is_currch_ary_lblk() || this.$is_currch_obj_lblk())}
-    //
-    $is_currch_ary_rblk() {return(cfg.array_blks.rhas(this.ch_cache.curr))}
-    $is_currch_obj_rblk() {return(cfg.obj_blks.rhas(this.ch_cache.curr))}
+    $is_currch_ary_rblk() {return(cfg.array_blks.rhas(this.ch))}
+    $is_currch_obj_rblk() {return(cfg.obj_blks.rhas(this.ch))}
     $is_currch_rblk() {return(this.$is_currch_ary_rblk() || this.$is_currch_obj_rblk())}
-    //
-    $is_currch_hash() {return(cfg.hash === this.ch_cache.curr)}
-    //
-    $is_currch_ref() {return(cfg.ref === this.ch_cache.curr)}
-    //
+    $is_currch_hash() {return(cfg.hash === this.ch)}
+    $is_currch_ref() {return(cfg.ref === this.ch)}
+    ////
     $mv_avcmt_to_avcmt() {
         let nd = this.avnd_cache.data;
         nd.avcmt = this.cmt_cache.avcmt;
         this.cmt_cache.avcmt = [];
     }
-    //
-    $change_state_when_end_av(s=empty,quote=empty) {
+    $change_state_when_end_av(si=empty,quote=empty) {
         let pnd = this.stack.lst;
         if(pnd.is_ary()) {
-            if(s === empty) {
+            if(si === empty) {
                 this.state = STATE.bv
             } else {
                 this.state = STATE.v;
-                this.str_cache.v = s;
+                this.str_cache.v = si;
                 if(quote === empty) {
                 } else {
-                    this.str_cache.maybe_vquote = quote
+                    this.str_cache.maybe_vquote = quote;
                 }
             }
         } else {
-            if(s === empty) {
+            if(si === empty) {
                 this.state = STATE.bk
             } else {
                 this.state = STATE.k;
-                this.str_cache.k = s;
+                this.str_cache.k = si;
             }
         }
         return(this.state)
     }
-    //
+    ////
     $vcache_to_nd() {
         let v = this.str_cache.v;
         let nd ;
@@ -317,12 +306,6 @@ class D {
         } else {
             return(quoted.rslt)
         }
-    }
-    //
-    $abandon_key_when_end_bv() {
-        this.cmt_cache.kcmt = [];
-        this.cmt_cache.bvcmt = [];
-        d.str_cache.k = empty;
     }
     //
     $refresh_key(s=empty) {

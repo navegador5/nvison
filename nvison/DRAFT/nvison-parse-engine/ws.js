@@ -9,32 +9,19 @@ function handle(d) {
         //do nothing
     } else if(state === gtv(STATE.k)) {
 
-        d.str_cache.k = empty;
-        d.state = STATE.bk;
+        d.state = STATE.ak;
 
     } else if(state === gtv(STATE.ak)) {
-
-        d.str_cache.k = empty;
-        d.state = STATE.bk;
-
+        //do nothing
     } else if(state === gtv(STATE.bv)) {
-
-        d.abandon_key_when_end_bv();
-        let pnd = d.stack.lst;
-        pnd.is_ary()?d.state = STATE.bv : d.state = STATE.bk;
-
-
+        //do nothing 
     } else if(state === gtv(STATE.v)) {
-        
-        //v-to-bk or v-to-bv
+       
         d.$setup_leafnd();
-        d.$change_state_when_end_av();
+        d.state = STATE.av;
 
     } else if(state === gtv(STATE.av)) {
-        
-        d.$mv_avcmt_to_avcmt();
-        d.$change_state_when_end_av();
-
+         //do nothing    
     } else {
         //impossible
         //exception states will be terminated in main loop

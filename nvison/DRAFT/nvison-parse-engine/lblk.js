@@ -6,34 +6,36 @@ const STATE = _STATE.STATE_DICT;
 function handle(d) {
     let state = d.state;
     if(state === gtv(STATE.bk)) {
-        //do nothing
+        
+        d.str_cache.k = d.ch_cache.curr;
+        d.state = STATE.k;
+    
     } else if(state === gtv(STATE.k)) {
 
-        d.str_cache.k = empty;
-        d.state = STATE.bk;
+        d.str_cache.k = d.str_cache.k + d.ch_cache.curr;
 
     } else if(state === gtv(STATE.ak)) {
 
-        d.str_cache.k = empty;
-        d.state = STATE.bk;
+        d.$refresh_key();
+        d.state = STATE.k
 
     } else if(state === gtv(STATE.bv)) {
 
-        d.abandon_key_when_end_bv();
-        let pnd = d.stack.lst;
-        pnd.is_ary()?d.state = STATE.bv : d.state = STATE.bk;
-
+        //this function will change state itself
+        d.$open_nonleaf_nd();
 
     } else if(state === gtv(STATE.v)) {
         
-        //v-to-bk or v-to-bv
         d.$setup_leafnd();
         d.$change_state_when_end_av();
+        d.__unshift_g(d.ch_cache.curr);
 
     } else if(state === gtv(STATE.av)) {
-        
+       
+
         d.$mv_avcmt_to_avcmt();
         d.$change_state_when_end_av();
+        d.__unshift_g(d.ch_cache.curr);
 
     } else {
         //impossible
