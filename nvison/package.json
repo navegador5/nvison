@@ -43,9 +43,9 @@
   "homepage": "https://github.com/navegador5/nvison#readme",
   "dependencies": {
     "minimist": "^1.2.5",
-    "nv-string-comment": "^1.0.3",
-    "nv-string-stream": "^1.0.9",
+    "nv-string-comment": "^1.0.4",
+    "nv-string-stream": "^1.0.10",
     "nvison-cfg": "^1.0.5",
-    "nvison-parse-internal": "^1.0.23"
+    "nvison-parse-internal": "^1.0.24"
   }
 }
