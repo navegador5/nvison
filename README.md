@@ -1,6 +1,7 @@
 nvison
 ============
 - another json
+- undefined
 - bin
 - hex
 - oct
@@ -43,6 +44,15 @@ parse
 
 examples
 --------
+
+### undefined
+
+    const ison = require("./index");
+    var code = `[undefined,null,true,false]`
+    var j = ison.parse_from_str(code)
+    > j
+    [ undefined, null, true, false ]
+    >
 
 ### number
 
