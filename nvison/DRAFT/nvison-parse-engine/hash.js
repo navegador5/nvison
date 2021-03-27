@@ -14,8 +14,11 @@ function handle(d) {
         let cond = d.$is_hash_of_pnd();
         let pnd = d.stack.lst;
         if(state === gtv(STATE.bk)) {
-            
-            if(cond) {pnd.hashes.add(rslt);} else {}
+            // {  #root
+            //    k0:v0,
+            //    k1:&root
+            // }
+            if(d.$is_hash_of_pnd()) {pnd.hashes.add(rslt);} else {}
 
         } else if(state === gtv(STATE.k)) {
 
@@ -27,8 +30,22 @@ function handle(d) {
             d.$push_kcmt(rslt);
 
         } else if(state === gtv(STATE.bv)) {
-           
-            if(cond) {pnd.hashes.add(rslt);} else {}
+            //valid
+            //[ #root
+            //    100,
+            //    &root
+            //]
+            
+            //no effect
+            // { 
+            //     k0: #hash v0,
+            //     k1: &hash
+            // }
+
+            if(
+                d.$is_hash_of_pnd() && 
+                pnd.is_ary()
+            ) {pnd.hashes.add(rslt);} else {}
 
              
         } else if(state === gtv(STATE.v)) {

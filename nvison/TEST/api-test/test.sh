@@ -29,6 +29,9 @@ cd ../
 cd hash-and-ref
 node hr0.tst.js
 node hr1.tst.js
+node hr2.tst.js
+node hr3.tst.js
+node hr4.tst.js
 cd ../
 
 cd number
