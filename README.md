@@ -287,6 +287,26 @@ examples
     */
 
 
+#### unclosed quotes will be dropped
+
+    { k0:v0, key : "val-\t-....        -> {k0:v0}
+    if you want the lefted parted for continue, use
+
+        require("nvison-parse-internal")
+
+
+        D {
+          ....
+          lefted: {
+            type: 3,
+            data: { rslt: 'val-\t-....\n\n\n', lefted: '', state: 3, quote: '"' }
+          },
+          ....
+        }
+
+
+
+
 ###  comments 
 
 - two kind :  line-comment(//....\n)  and block-comment(/*.....*/)

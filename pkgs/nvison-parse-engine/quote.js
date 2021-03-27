@@ -5,7 +5,7 @@ const STATE = _STATE.STATE_DICT;
 
 function handle(d,quote) {
     let state = d.state;
-    let rslt = d.$handle_quote();
+    let rslt = d.$handle_quote(quote);
     if(rslt === empty) {
         //quote-eof
     } else {

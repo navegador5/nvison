@@ -4,7 +4,6 @@ const gtv = _STATE.gtv;
 const STATE = _STATE.STATE_DICT;
 
 function handle(d) {
-    console.log("here")
     let state = d.state;
     if(state === gtv(STATE.bk)) {
         //do nothing

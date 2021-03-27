@@ -309,10 +309,10 @@ class D {
     }
     //
     //
-    $handle_quote() {
+    $handle_quote(quote) {
         let quoted = _get_quoted(this);
         if(quoted.state !== char_esc.STATE_DICT.succ) {
-            _handle_quote_eof(quoted,this.ch_cache.curr);
+            _handle_quote_eof(this,quoted,quote);
             return(empty)
         } else {
             return(quoted.rslt)
@@ -398,7 +398,7 @@ class D {
             if(cfg.quotes.has(ch)) {
                 let quoted = _get_quoted(this);
                 if(quoted.state !== char_esc.STATE_DICT.succ) {
-                    _handle_quote_eof(quoted,this.ch_cache.curr);
+                    _handle_quote_eof(this,quoted,this.ch_cache.curr);
                     if(mode === cfg.hash) {
                         this.state = _STATE.get_hash_quote_eofv_with_code(this.state);
                     } else {

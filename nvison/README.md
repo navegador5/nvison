@@ -218,6 +218,8 @@ examples
 - colons following value  will be dropped
 - unfinished key:value pair  will be dropped
 
+#####
+
     //colon before key will be treated as  whitespace
 
     { a:b, : key : value}   ->  { a: 'b', key: 'value' }
@@ -279,6 +281,23 @@ examples
     /*
         [ 'a\t\x0B\tb', 'cde', 'fgh', 'ijk', 'lmnopq', 'rst \n uvw \n xyz' ]
     */
+
+#### unclosed quotes will be dropped
+
+    { k0:v0, key : "val-\t-....        -> {k0:v0}
+    if you want the lefted parted for continue, use  
+
+        require("nvison-parse-internal") 
+
+
+        D {
+          ....
+          lefted: {
+            type: 3,
+            data: { rslt: 'val-\t-....\n\n\n', lefted: '', state: 3, quote: '"' }
+          },
+          ....
+        }
 
 
 ###  comments 

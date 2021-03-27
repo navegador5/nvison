@@ -1,6 +1,10 @@
 const ison = require("/opt/JS/NV5_/nvison/nvison/index")
 
+const path = require("path");
+console.log(path.resolve(__dirname,__filename))
 
+
+var real = ison.parse_from_file("./str.ison");
 var should_be = [
   'abc-def',
   'def\tsquoted',
@@ -9,4 +13,13 @@ var should_be = [
   'str@auto-concat@str'
 ]
 
-console.log(ison.parse_from_file("./str.ison"))
+
+
+
+
+
+
+const assert = require("assert")
+assert.deepStrictEqual(real,should_be)
+
+console.log(real);

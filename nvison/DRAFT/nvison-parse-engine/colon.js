@@ -16,10 +16,10 @@ function handle(d) {
     } else if(state === gtv(STATE.bv)) {
         //do nothing [100, :] -> [100, @before_val] 
     } else if(state === gtv(STATE.v)) {
-        // [abc:,123] -> [ 'abc:', 123 ] 
-        // {k:abc:} -> { k: 'abc:' }
-        // treat as normal char
-        d.str_cache.maybe_vquote = empty;
+    
+        d.$setup_leafnd();   //maybe_vquote label will be handled in setup_leafnd
+        d.$change_state_when_end_av();
+    
     } else if(state === gtv(STATE.av)) {
         //skip 
         //[abc : 666]-> [ 'abc', 666 ]

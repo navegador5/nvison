@@ -48,16 +48,17 @@ function * _creat_reverse_gen(arr) {
     }
 }
 
+function _update_cursor_after_tokize(that,tok) {
+    that.cursor.prev = that.cursor.curr;
+    //tok.ch means lefted
+    that.cursor.curr = that.cursor.curr + tok.offset - Array.from(tok.ch).length;
+}
+
 function _get_quoted(that) {
-    let quoted;
-    if(that.__is_sync_mode()) {
-        quoted = char_esc.from_generator(that.g,that.ch_cache.curr);
-    } else {
-        quoted = char_esc.from_generator(
-            _creat_reverse_gen(that.unshift_cache),
-            that.ch_cache.curr
-        )
-    }
+    let g = sync_gen_from_str(that.input.str) 
+    let quoted = char_esc.from_generator(g,that.ch);
+    g = null; //release it 
+    _update_cursor_after_tokize(that,tok);
     return(quoted)
 }
 
@@ -301,10 +302,10 @@ class D {
     }
     //
     //
-    $handle_quote() {
+    $handle_quote(quote) {
         let quoted = _get_quoted(this);
         if(quoted.state !== char_esc.STATE_DICT.succ) {
-            _handle_quote_eof(quoted,this.ch_cache.curr);
+            _handle_quote_eof(this,quoted,quote);
             return(empty)
         } else {
             return(quoted.rslt)
@@ -384,13 +385,22 @@ class D {
     }
     $get_hash_or_ref(mode='#') {
         let hrs = empty;
-        let ch = this.$next_ch();
+        ////
+        let si = this.cursor.curr;
+        ////
+        this.$next_ch();
+        let ch = this.ch; 
+        ////
         let cache = ""
+        ////
         while(!char_ws.is_ws(ch) && !cfg.commas.has(ch)) {
             if(cfg.quotes.has(ch)) {
+                ////
+                cache = cache + this.input.slice(si,this.cursor.curr);
+                ////
                 let quoted = _get_quoted(this);
                 if(quoted.state !== char_esc.STATE_DICT.succ) {
-                    _handle_quote_eof(quoted,this.ch_cache.curr);
+                    _handle_quote_eof(this,quoted,ch);
                     if(mode === cfg.hash) {
                         this.state = _STATE.get_hash_quote_eofv_with_code(this.state);
                     } else {
@@ -400,18 +410,26 @@ class D {
                 } else {
                     cache = cache + quoted.rslt;
                 }
-                ch = this.$next_ch();
+                si = this.cursor.curr;
+                ////
+                this.$next_ch();
+                ch = this.ch;
+                ////
             } else if(ch === undefined) {
                 $handle_main_eof();
                 return(hrs);
             } else {
-                cache = cache + ch;
-                ch = this.$next_ch();
+                ////cursor auto move
+                this.$next_ch();
+                ch = this.ch;
                 //collecting
             }
         }
-        this.__unshift_g(ch);
+        this.curosr.curr = this.curosr.curr - 1;
+        ////
         hrs = cache;
+        cache = null;
+        ////
         return(hrs)
     }
     //
