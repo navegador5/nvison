@@ -221,6 +221,8 @@ examples
 - colons following value  will be dropped
 - unfinished key:value pair  will be dropped
 
+#####
+
     //colon before key will be treated as  whitespace
 
     { a:b, : key : value}   ->  { a: 'b', key: 'value' }
