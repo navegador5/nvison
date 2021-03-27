@@ -1,6 +1,6 @@
 {
   "name": "nvison",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "another json-like structure",
   "main": "index.js",
   "scripts": {
@@ -46,6 +46,6 @@
     "nv-string-comment": "^1.0.4",
     "nv-string-stream": "^1.0.10",
     "nvison-cfg": "^1.0.5",
-    "nvison-parse-internal": "^1.0.26"
+    "nvison-parse-internal": "^1.0.27"
   }
 }

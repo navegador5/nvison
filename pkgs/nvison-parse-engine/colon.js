@@ -18,8 +18,8 @@ function handle(d) {
         //do nothing 
     } else if(state === gtv(STATE.v)) {
         
-        d.str_cache.v = d.str_cache.v + d.ch_cache.curr;
-        d.str_cache.maybe_vquote = empty;
+        d.$setup_leafnd();//maybe_vquote label will be handled
+        d.$change_state_when_end_av();
 
     } else if(state === gtv(STATE.av)) {
 

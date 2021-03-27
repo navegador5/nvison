@@ -203,6 +203,9 @@ class D {
     $is_currch_hash() {return(cfg.hash === this.ch)}
     $is_currch_ref() {return(cfg.ref === this.ch)}
     ////
+    get vcache() {return(this.input.str.slice(this.str_cache.v,this.cursor.curr))}
+    get kcache() {return(this.input.str.slice(this.str_cache.k,this.cursor.curr)))}
+    ////
     $mv_avcmt_to_avcmt() {
         let nd = this.avnd_cache.data;
         nd.avcmt = this.cmt_cache.avcmt;
@@ -233,7 +236,7 @@ class D {
     }
     ////
     $vcache_to_nd() {
-        let v = this.str_cache.v;
+        let v = this.vcache;
         let nd ;
         if(this.str_cache.maybe_vquote === empty){
             let rslt = parse0(
@@ -241,20 +244,20 @@ class D {
                 {only_value:false,with_value:true,with_type:true,unknown_as_string:true}
             );
             if(rslt.type === typdef.TYPE_DICT.UndefinedLiteral) {
-                nd = new UndefinedLiteral(this.str_cache.k);
+                nd = new UndefinedLiteral(this.kcache);
             } else if(rslt.type === typdef.TYPE_DICT.NullLiteral) {
-                nd = new NullLiteral(this.str_cache.k);
+                nd = new NullLiteral(this.kcache);
             } else if(rslt.type === typdef.TYPE_DICT.BooleanLiteral.TrueLiteral) {
-                nd = new BooleanLiteral("true",this.str_cache.k);
+                nd = new BooleanLiteral("true",this.kcache);
             } else if(rslt.type === typdef.TYPE_DICT.BooleanLiteral.FalseLiteral) {
-                nd = new BooleanLiteral("false",this.str_cache.k);
+                nd = new BooleanLiteral("false",this.kcache);
             } else if(rslt.type === typdef.TYPE_DICT.StringLiteral) {
-                nd = new StringLiteral(rslt.value,this.str_cache.k);
+                nd = new StringLiteral(rslt.value,this.kcache);
             } else {
-                nd = new NumericLiteral(rslt,this.str_cache.k);
+                nd = new NumericLiteral(rslt,this.kcache);
             }
         } else {
-            nd = new StringLiteral(v,this.str_cache.k);
+            nd = new StringLiteral(v,this.kcache);
         }
         this.str_cache.v = empty;
         this.str_cache.maybe_vquote = empty;
@@ -275,7 +278,7 @@ class D {
     //
     $mv_key_to_nd() {
         let nd = this.avnd_cache.data;
-        nd.key = this.str_cache.k;
+        nd.key = this.kcache;
         this.str_cache.k = empty;
         return(nd.key);
     }
@@ -308,11 +311,17 @@ class D {
         }
     }
     //
-    $refresh_key(s=empty) {
-        if(s === empty) {
-            this.str_cache.k = this.ch_cache.curr;
+    $abandon_key_when_end_bv() {
+        this.cmt_cache.kcmt = [];
+        this.cmt_cache.bvcmt = [];
+        d.str_cache.k = empty;
+    }
+    //
+    $refresh_key(si=empty) {
+        if(si === empty) {
+            this.str_cache.k = this.cursor.curr;
         } else {
-            this.str_cache.k = s;
+            this.str_cache.k = si;
         }
         this.cmt_cache.kcmt = [];
     }

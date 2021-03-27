@@ -211,6 +211,37 @@ examples
     */    
     
 
+####  Error auto recover
+
+- colon before key will be treated as  whitespace
+- multi-colons before value will be treated as  one
+- colons following value  will be dropped
+- unfinished key:value pair  will be dropped
+
+    //colon before key will be treated as  whitespace
+
+    { a:b, : key : value}   ->  { a: 'b', key: 'value' }
+
+    //multi-colons before value will be treated as  one
+
+    { a:b, key ::::value }   ->  { a: 'b', key: 'value' }
+    [100, ::::xy]            ->  [ 100, 'xy' ]
+
+    //colons following value  will be dropped
+
+    [abc::: 123]                   ->  [ 'abc', 123 ],
+    {k:abc:::, k2:v2}              ->  { k: 'abc', k2: 'v2' }
+    [abc : 666]                    ->  [ 'abc', 666 ]
+    {k:v, key:value  : 100:200}    ->  { '100': 200, k: 'v', key: 'value' }
+
+
+    //unfinished k:v  will be dropped
+    {k:abc:, k2,  k3:v3}    -> { k: 'abc', k3: 'v3' }
+    {k:abc:, k2:, k3:v3}    -> { k: 'abc', k3: 'v3' }
+    {k:abc:, k2 :,k3:v3}    -> { k: 'abc', k3: 'v3' }
+
+
+
 ### quotes
 
 - quotes is optional if without escape

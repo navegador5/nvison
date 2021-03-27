@@ -322,7 +322,7 @@ class D {
     $abandon_key_when_end_bv() {
         this.cmt_cache.kcmt = [];
         this.cmt_cache.bvcmt = [];
-        d.str_cache.k = empty;
+        this.str_cache.k = empty;
     }
     //
     $refresh_key(s=empty) {

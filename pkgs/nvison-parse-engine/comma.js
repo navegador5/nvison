@@ -19,7 +19,7 @@ function handle(d) {
 
     } else if(state === gtv(STATE.bv)) {
 
-        d.abandon_key_when_end_bv();
+        d.$abandon_key_when_end_bv();
         let pnd = d.stack.lst;
         pnd.is_ary()?d.state = STATE.bv : d.state = STATE.bk;
 

@@ -20,17 +20,9 @@ function handle(d) {
 
     } else if(state === gtv(STATE.bv)) {
 
-        d.cmt_cache.kcmt = [];
-        d.cmt_cache.bvcmt = [];
-        d.str_cache.k = empty;
+        d.abandon_key_when_end_bv();
         let pnd = d.stack.lst;
-        console.log(pnd)
-        if(pnd.$is_ary()) {
-            d.state = STATE.bv
-        } else {
-            d.state = STATE.bk;
-        }
-
+        pnd.is_ary()?d.state = STATE.bv : d.state = STATE.bk;
 
     } else if(state === gtv(STATE.v)) {
         

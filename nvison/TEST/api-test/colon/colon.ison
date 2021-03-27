@@ -1,3 +1,23 @@
 {a:b,c:d,e:f}
 {a=b,c=d,e=f}
 {a:b c=d,e=f; g:h}
+
+//bk
+{ a:b, : key : value}
+//ak
+{ a:b, key :value}
+
+//bv
+{ a:b, key :::: value }
+[100, ::::xy]
+
+//v
+[abc:,123] 
+{k:abc:, k2,  k3:v3}
+{k:abc:, k2:, k3:v3}
+{k:abc:, k2 :,k3:v3}
+{k:abc:, k2:v2}
+
+//av
+[abc : 666]
+{k:v, key:value  : 100:200}

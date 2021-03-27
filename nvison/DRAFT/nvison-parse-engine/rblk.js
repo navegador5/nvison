@@ -62,10 +62,8 @@ function match_handle(d) {
 
     } else if(state === gtv(STATE.bv)) {
 
-        d.str_cache.k =empty;
-        d.cmt_cache.kcmt = [];
-        d.cmt_cache.bvcmt = [];
-        d.$close_nonleaf_nd()
+        d.$abandon_key_when_end_bv();
+        d.$close_nonleaf_nd();
 
     } else if(state === gtv(STATE.v)) {
 
