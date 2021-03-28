@@ -156,6 +156,7 @@ class Cfg {
     get obj_blks() {return(this.#oblks)}
     get quotes() {return(this.#quotes)}
     get commas() {return(this.#commas)}
+    get fst_comma() {return(Array.from(this.#commas)[0])}
     get colons() {return(this.#colons)}
 }
 

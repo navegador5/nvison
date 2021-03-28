@@ -1,0 +1,7 @@
+
+[ 100,200#hash, &hash]
+
+[ 100,200#hash &hash]
+
+[ 100,200#hash&hash]
+

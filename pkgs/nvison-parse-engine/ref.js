@@ -42,11 +42,9 @@ function handle(d) {
                 d.state = STATE.av;
 
             } else if(state === gtv(STATE.av)) {
-           
                 if(!d.$has_yield_sign()) {
                     d.$mv_avcmt_to_avcmt();
                     d.$set_yield_sign();
-                    d.__unshift_g(d.ch_cache.curr);
                 } else {
                     d.$clear_yield_sign();
                     if(pnd.is_ary()) {

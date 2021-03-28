@@ -4,7 +4,7 @@
     "nvison-obj-class": "^1.0.6"
   },
   "name": "nvison-parse-scope",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

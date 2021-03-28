@@ -49,9 +49,9 @@ function clone(nd,key) {
     } else if(nd instanceof NullLiteral)  {
         return(new NullLiteral('null',key))
     } else if(nd instanceof BooleanLiteral) {
-        return(new BooleanLiteral(nd.value.vto_str(),key))
+        return(new BooleanLiteral(nd.vto_rawstr(),key))
     } else if(nd instanceof NumericLiteral) {
-        return(new NumericLiteral(nd.value.vto_str(),key))
+        return(new NumericLiteral(nd.vto_rawstr(),key))
     } else if(nd instanceof StringLiteral) {
         return(new StringLiteral(nd.value,key))
     } else if(

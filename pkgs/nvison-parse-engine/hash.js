@@ -11,11 +11,10 @@ function handle(d) {
     if(rslt === empty) {
         //hash-eof
     } else {
-        let cond = d.$is_hash_of_pnd();
         let pnd = d.stack.lst;
         if(state === gtv(STATE.bk)) {
-            
-            if(cond) {pnd.hashes.add(rslt);} else {}
+        
+            if(d.$is_hash_of_pnd()) {pnd.hashes.add(rslt);} else {}
 
         } else if(state === gtv(STATE.k)) {
 
@@ -28,7 +27,10 @@ function handle(d) {
 
         } else if(state === gtv(STATE.bv)) {
            
-            if(cond) {pnd.hashes.add(rslt);} else {}
+            if(
+                d.$is_hash_of_pnd() &&
+                pnd.is_ary()
+            ) {pnd.hashes.add(rslt);} else {}
 
              
         } else if(state === gtv(STATE.v)) {
@@ -36,6 +38,7 @@ function handle(d) {
             d.$setup_leafnd();
             let nd = d.avnd_cache.data;
             nd.hashes.add(rslt);
+            d.state = STATE.av;
 
         } else if(state === gtv(STATE.av)) {
          

@@ -394,7 +394,16 @@ class D {
         let hrs = empty;
         let ch = this.$next_ch();
         let cache = ""
-        while(!char_ws.is_ws(ch) && !cfg.commas.has(ch)) {
+        while(
+            !char_ws.is_ws(ch) &&
+            !cfg.commas.has(ch) &&
+            !cfg.colons.has(ch) &&
+            !cfg.array_blks.has(ch) &&
+            !cfg.obj_blks.has(ch) &&
+            (ch !== cfg.hash) &&
+            (ch !== cfg.ref)  &&
+            (ch !== cfg.slash)
+        ) {
             if(cfg.quotes.has(ch)) {
                 let quoted = _get_quoted(this);
                 if(quoted.state !== char_esc.STATE_DICT.succ) {
