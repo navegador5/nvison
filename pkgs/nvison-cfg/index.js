@@ -1,9 +1,11 @@
+const {WS_CH_ARR,NON_NL_WS_CH_ARR,NL_CH_ARR} = require("nv-char-whitespace");
 const {slength} = require("nv-string-basic"); 
 const {add_repr,ZWNJ,ZWJ} = require("nv-facutil-basic");
 
 
 const ERROR_DICT = {
-    reserved:new Error(" [/,*,#,&,`]   are reserved"),
+    tmpl_quote:new Error('tmpl_quote: ` cant be deleted'),
+    reserved:new Error(" [/,*,#,&,`,\\,] and whitespaces  are reserved"),
     inuse:new Error("in using"),
     char:new Error("must be a char"),
     pair:new Error("left block must be different with right"),
@@ -83,7 +85,11 @@ class Single {
         if(this.size <2) {
             throw(ERROR_DICT.cant_be_empty)
         } else {
-            this.#st.delete(v)
+            if(v === '`') {
+                throw(ERROR_DICT.tmpl_quote)
+            } else {
+                this.#st.delete(v)
+            }
         }
     }
     has(v) {
@@ -123,7 +129,7 @@ class Cfg {
         this.#inited = true
     }
     ////
-    get reserved () {return(['/','*','#','&','`'])}
+    get reserved () {return(['/','*','#','&','`','\\'].concat(WS_CH_ARR))}
     get inuse() {
         let st = new Set()
         if(this.#inited) {
@@ -144,6 +150,7 @@ class Cfg {
         return(ch)
     }
     ////
+    get esc()   {return('\\')}
     get slash() {return('/')}
     get line_comment() {return('//')}
     get asterisk() {return('*')}
@@ -152,12 +159,20 @@ class Cfg {
     get ref  () {return('&')}
     get tmpl_quote() {return('`')}
     ////
+    get nl() {return(NL_CH_ARR)}
+    get non_nl_ws() {return(NON_NL_WS_CH_ARR)}
+    get ws() {return(WS_CH_ARR)}
+    //// fst_xxx is for padding when scan
     get array_blks() {return(this.#ablks)}
+    get fst_ary_blks() {return(Array.from(this.#ablks)[0])}
     get obj_blks() {return(this.#oblks)}
+    get fst_obj_blks() {return(Array.from(this.#oblks)[0])}
     get quotes() {return(this.#quotes)}
+    get fst_quote() {return(Array.from(this.#quotes)[0])}
     get commas() {return(this.#commas)}
     get fst_comma() {return(Array.from(this.#commas)[0])}
     get colons() {return(this.#colons)}
+    get fst_colon() {return(Array.from(this.#colons)[0])}
 }
 
 class _Reserved {
@@ -172,6 +187,7 @@ Object.defineProperty(_Reserved,'name',{value:ZWJ})
 
 class _Fixed {
     constructor(cfg) {
+        this.esc = cfg.esc;
         this.hash = cfg.hash;
         this.ref = cfg.ref;
         this.tmpl_quote = cfg.tmpl_quote;
@@ -179,6 +195,8 @@ class _Fixed {
         this.asterisk = cfg.asterisk;
         this.line_comment = cfg.line_comment;
         this.blk_comments = cfg.blk_comments;
+        this.nl = cfg.nl;
+        this.non_nl_ws = cfg.non_nl_ws;
     }
     get [Symbol.toStringTag] () {return('fixed')}
 }

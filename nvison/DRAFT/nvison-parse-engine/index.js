@@ -12,9 +12,14 @@ const hash_handle = require("./hash");
 const ref_handle = require("./ref");
 const others_handle = require("./others");
 
+const _STATE = require("nvison-parse-state");
+const gtv = _STATE.gtv;
+const STATE = _STATE.STATE_DICT;
+const cfg = require("nvison-cfg");
 
-function *gen(input) {
-    let d = new D(input);
+
+function *gen(g,pre_padding=empty) {
+    let d = new D(g,pre_padding);
     while(true) {
         d.$next_ch();
         if(d.$is_currch_eof()) {
@@ -22,7 +27,6 @@ function *gen(input) {
             yield(d);
             break;
         } else if(d.$is_currch_comma()) {
-            console.log("!!!")
             comma_handle(d);
             yield(d);
         } else if(d.$is_currch_colon()) {
@@ -47,8 +51,12 @@ function *gen(input) {
             hash_handle(d);
             yield(d);
         } else if(d.$is_currch_ref()) {
-            ref_handle(d);
-            yield(d);
+            if(d.state === gtv(STATE.av)) {
+                d.__unshift_g(cfg.fst_comma+d.ch_cache.curr)
+            } else {
+                ref_handle(d);
+                yield(d);
+            }
         } else {
             others_handle(d);
             yield(d);

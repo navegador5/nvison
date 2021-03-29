@@ -1,6 +1,6 @@
 {
   "name": "nvison-parse-engine",
-  "version": "1.0.44",
+  "version": "1.0.45",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "nv-facutil-basic": "^1.0.15",
-    "nvison-cfg": "^1.0.8",
-    "nvison-parse-d": "^1.0.53",
+    "nvison-cfg": "^1.0.9",
+    "nvison-parse-d": "^1.0.54",
     "nvison-parse-state": "^1.0.12"
   }
 }

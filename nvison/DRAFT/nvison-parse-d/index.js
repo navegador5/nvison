@@ -393,7 +393,16 @@ class D {
         ////
         let cache = ""
         ////
-        while(!char_ws.is_ws(ch) && !cfg.commas.has(ch)) {
+        while(
+            !char_ws.is_ws(ch) &&
+            !cfg.commas.has(ch) &&
+            !cfg.colons.has(ch) &&
+            !cfg.array_blks.has(ch) &&
+            !cfg.obj_blks.has(ch) &&
+            (ch !== cfg.hash) &&
+            (ch !== cfg.ref)  &&
+            (ch !== cfg.slash)
+        ) {
             if(cfg.quotes.has(ch)) {
                 ////
                 cache = cache + this.input.slice(si,this.cursor.curr);

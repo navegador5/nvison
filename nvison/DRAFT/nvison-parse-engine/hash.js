@@ -11,7 +11,6 @@ function handle(d) {
     if(rslt === empty) {
         //hash-eof
     } else {
-        let cond = d.$is_hash_of_pnd();
         let pnd = d.stack.lst;
         if(state === gtv(STATE.bk)) {
             // {  #root
@@ -53,6 +52,7 @@ function handle(d) {
             d.$setup_leafnd();
             let nd = d.avnd_cache.data;
             nd.hashes.add(rslt);
+            d.state = STATE.av;
 
         } else if(state === gtv(STATE.av)) {
          
