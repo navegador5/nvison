@@ -3,7 +3,7 @@ const _STATE = require("nvison-parse-state");
 const gtv = _STATE.gtv;
 const STATE = _STATE.STATE_DICT;
 const cfg = require("nvison-cfg");
-
+const {CommentLine} = require("nvison-obj-class");
 
 function handle(d) {
     let state = d.state;
@@ -17,13 +17,15 @@ function handle(d) {
             if(d.$is_hash_of_pnd()) {pnd.hashes.add(rslt);} else {}
 
         } else if(state === gtv(STATE.k)) {
-
-            d.$push_kcmt(rslt);
+        
+            let cmtnd = new CommentLine(rslt)
+            d.$push_kcmt(cmtnd);
             d.state = STATE.ak;
            
         } else if(state === gtv(STATE.ak)) {
-
-            d.$push_kcmt(rslt);
+            
+            let cmtnd = new CommentLine(rslt)
+            d.$push_kcmt(cmtnd);
 
         } else if(state === gtv(STATE.bv)) {
            

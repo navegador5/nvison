@@ -1,0 +1,7 @@
+value #hash
+
+[ 100,200&hash]
+
+{
+    k:300&hash:v1
+}

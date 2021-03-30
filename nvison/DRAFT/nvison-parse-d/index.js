@@ -1,10 +1,10 @@
 const {empty,SimpleStack} = require("nv-facutil-basic");
 const Stack = SimpleStack;
 
-const {
-    get_next_pos,
-    sync_gen_from_str,
-} = require("nv-string-stream");
+const {CharCursor,StrCursor} = require("nv-string-cursor");
+
+
+const {sync_gen_from_str} = require("nv-string-stream");
 
 
 const {syncg_unshift} = require("nv-facutil-generator");
@@ -141,16 +141,7 @@ function  _handle_lblk(that,Cls) {
 const ROOT_LBLK_CH = Symbol("root_lblk_ch")
 const ROOT_RBLK_CH = Symbol("root_rblk_ch")
 
-function _next_ch(that) {
-   let old_pos = that.cursor.curr;
-   let new_pos = get_next_pos(that.input.str,old_pos);
-   that.cursor.prev = old_pos;
-   if(new_pos !== undefined) {
-       that.cursor.curr = new_pos;
-   } else {
-       that.cursor.curr = empty;
-   }
-}
+
 
 
 class D {
@@ -158,11 +149,15 @@ class D {
     #stack = new Stack();
     constructor(s) {
         ////
-        this.input    =   {str:s,g:g} 
-        this.cursor   =   {prev:empty, curr:0}
+        this.input      =   {str:s,g:g} 
+        this.ch_cache   =   new CharCursor();  
         ////
         this.lefted = {type:empty,data:empty};
-        this.str_cache = {k:empty,v:empty,maybe_vquote:empty};
+        this.str_cache = {
+            k:new StrCursor()
+            v:new StrCursor(),
+            maybe_vquote:empty
+        };
         this.cmt_cache = {kcmt:[],bvcmt:[],avcmt:[]}
         let rtnd = new ArrayExpression();
         this.stack.push(rtnd);

@@ -1,0 +1,12 @@
+keyname #hash
+alias   #alias
+
+{
+    k0 &hash#alias:v0,
+}
+
+{
+    k0&hash:v0,
+}
+
+

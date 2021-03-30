@@ -4,8 +4,8 @@ const path = require("path");
 console.log(path.resolve(__dirname,__filename))
 
 
-let real = (ison.parse_from_file("./v#hash.ison",{enable_ref:true}))
-let should_be = [ [ 100, 200, 200 ], [ 100, 200, 200 ], [ 100, 200, 200 ] ]
+let real = (ison.parse_from_file("./v-ref.ison",{enable_ref:true}))
+let should_be = [ 'value', [ 100, 200, 'value' ], { k: 300, value: 'v1' } ] 
 
 const assert = require("assert");
 assert.deepStrictEqual(real,should_be);

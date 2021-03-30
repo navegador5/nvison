@@ -17,13 +17,13 @@ function handle(d) {
             let pnd = d.stack.lst;
             if(state === gtv(STATE.bk)) {
                  
-                 d.str_cache.k = refnd.vto_rawstr();
-                 d.state = STATE.ak;
+                d.$refresh_key(refnd.vto_rawstr()) 
+                d.state = STATE.ak;
                  
             } else if(state === gtv(STATE.k)) {
 
-                d.str_cache.k = d.str_cache.k + refnd.vto_rawstr();
-
+                d.$refresh_key(refnd.vto_rawstr())
+                d.state = STATE.ak;
 
             } else if(state === gtv(STATE.ak)) {
 
@@ -36,7 +36,7 @@ function handle(d) {
                 d.state = STATE.av;
             } else if(state === gtv(STATE.v)) {
               
-                d.str_cache.v = d.str_cache.v + refnd.vto_rawstr();
+                
                 d.str_cache.maybe_vquote = empty;
                 d.$setup_leafnd();
                 d.state = STATE.av;

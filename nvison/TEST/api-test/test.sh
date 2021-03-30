@@ -32,6 +32,10 @@ node hr1.tst.js
 node hr2.tst.js
 node hr3.tst.js
 node hr4.tst.js
+node k#hash.tst.js
+node k-ref.tst.js
+node v#hash.tst.js
+node v-ref.tst.js
 cd ../
 
 cd number

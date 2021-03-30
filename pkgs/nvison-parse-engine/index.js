@@ -51,7 +51,7 @@ function *gen(g,pre_padding=empty) {
             hash_handle(d);
             yield(d);
         } else if(d.$is_currch_ref()) {
-            if(d.state === gtv(STATE.av)) {
+            if(d.state === gtv(STATE.av) || d.state === gtv(STATE.v)) {
                 d.__unshift_g(cfg.fst_comma+d.ch_cache.curr)
             } else {
                 ref_handle(d);

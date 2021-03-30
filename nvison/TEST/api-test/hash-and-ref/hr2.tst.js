@@ -14,5 +14,5 @@ function eq() {
 }
 
 const assert = require("assert");
-assert(eq(),true)
+assert.deepStrictEqual(eq(),true)
 console.log(real);
