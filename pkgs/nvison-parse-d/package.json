@@ -1,6 +1,6 @@
 {
   "name": "nvison-parse-d",
-  "version": "1.0.57",
+  "version": "1.0.60",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,9 +16,9 @@
     "nv-string-comment": "^1.0.5",
     "nv-string-stream": "^1.0.4",
     "nvison-cfg": "^1.0.10",
-    "nvison-obj-class": "^1.0.9",
+    "nvison-obj-class": "^1.0.11",
     "nvison-obj-typedef": "^1.0.3",
-    "nvison-parse-scope": "^1.0.12",
+    "nvison-parse-scope": "^1.0.14",
     "nvison-parse-state": "^1.0.12"
   }
 }

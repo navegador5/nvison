@@ -1,6 +1,6 @@
 {
   "name": "nvison-cfg",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,6 @@
   "dependencies": {
     "nv-char-whitespace": "^1.0.7",
     "nv-facutil-basic": "^1.0.12",
-    "nv-string-basic": "^1.0.21"
+    "nv-string-basic": "^1.0.23"
   }
 }

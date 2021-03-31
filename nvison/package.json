@@ -1,6 +1,6 @@
 {
   "name": "nvison",
-  "version": "1.0.17",
+  "version": "1.0.20",
   "description": "another json-like structure",
   "main": "index.js",
   "scripts": {
@@ -44,7 +44,7 @@
   "dependencies": {
     "minimist": "^1.2.5",
     "nv-facutil-basic": "^1.0.20",
-    "nvison-cfg": "^1.0.10",
-    "nvison-parse-internal": "^1.0.37"
+    "nvison-cfg": "^1.0.12",
+    "nvison-parse-internal": "^1.0.39"
   }
 }
