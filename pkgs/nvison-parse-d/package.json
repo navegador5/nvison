@@ -1,6 +1,6 @@
 {
   "name": "nvison-parse-d",
-  "version": "1.0.54",
+  "version": "1.0.57",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,16 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nv-char-escape": "^1.0.10",
-    "nv-char-whitespace": "^1.0.4",
+    "nv-char-escape": "^1.0.11",
+    "nv-char-whitespace": "^1.0.7",
     "nv-facutil-basic": "^1.0.14",
     "nv-facutil-generator": "^1.0.2",
-    "nv-string-comment": "^1.0.4",
+    "nv-string-comment": "^1.0.5",
     "nv-string-stream": "^1.0.4",
-    "nvison-cfg": "^1.0.9",
-    "nvison-obj-class": "^1.0.6",
+    "nvison-cfg": "^1.0.10",
+    "nvison-obj-class": "^1.0.9",
     "nvison-obj-typedef": "^1.0.3",
-    "nvison-parse-scope": "^1.0.10",
+    "nvison-parse-scope": "^1.0.12",
     "nvison-parse-state": "^1.0.12"
   }
 }

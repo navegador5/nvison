@@ -9,7 +9,7 @@ const str_bsc  = require("nv-string-basic");
 
 class ObjectProperty extends Root {
     constructor(key=empty) {
-        super();
+        super(false,false);
         this.key = key;          //只可能是empty 或者 str
         this.value = empty;
         this.type = empty;
