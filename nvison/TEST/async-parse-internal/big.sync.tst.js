@@ -19,21 +19,16 @@ const {
 
 const fs = require('fs')
 
-var count = 0
-var intr = setInterval(
-    ()=>{console.log(count);count=count+1;},
-    3000
-)
 
-console.log(new Date())
+var start = (new Date()).getTime()
 var rslt = parse_from_file("./svelte-compiler-3.15.0.json",{enable_ref:false});
-console.log(new Date())
+var end = (new Date()).getTime()
+console.log(end - start)
 
 
 var orig = fs.readFileSync("./svelte-compiler-3.15.0.json").toString()
 orig = JSON.stringify(JSON.parse(orig),null,4);
 rslt = JSON.stringify(rslt.value[0],null,4)
 console.log(orig === rslt)
-clearInterval(intr)
 
 

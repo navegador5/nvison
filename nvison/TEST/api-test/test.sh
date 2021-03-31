@@ -52,5 +52,7 @@ node prim.tst.js
 cd ../
 
 
-
+cd rblk-no-match
+node rblk.tst.js
+cd ../
 
