@@ -1,6 +1,6 @@
 {
   "name": "nvison",
-  "version": "1.0.20",
+  "version": "1.0.22",
   "description": "another json-like structure",
   "main": "index.js",
   "scripts": {
@@ -43,6 +43,7 @@
   "homepage": "https://github.com/navegador5/nvison#readme",
   "dependencies": {
     "minimist": "^1.2.5",
+    "nv-char-whitespace": "^1.0.7",
     "nv-facutil-basic": "^1.0.20",
     "nvison-cfg": "^1.0.12",
     "nvison-parse-internal": "^1.0.39"

@@ -1,14 +1,15 @@
 const STATE_DICT = {
     init:0,
-    word:1,
-    slash:1,
-    quote:2,
-    hash:3,
-    ref:4,
+    wopen:1,
+    qopen:2,             
+    qclose:3,
+    slash:4,
     lcmt:5,
-    blkcmt:6,
-    asterisk:7,
-    esc:8
+    blkcmt:6,    
 }
 
 
+
+module.exports = {
+    STATE_DICT
+}
